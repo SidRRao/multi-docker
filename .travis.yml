@@ -1,4 +1,6 @@
 sudo: required
+language: generic
+
 services:
   - docker
 
@@ -8,7 +10,7 @@ before_install:
     #tests for other containers can also be added here
 
 script:
-  - docker run sidrrao/react-test npm test -- --coverage
+  - docker run -e CI=true sidrrao/react-test npm test #-- --coverage
 
 after_success:
   - docker build -t sidrrao/multi-client ./client
