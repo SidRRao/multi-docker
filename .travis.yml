@@ -10,7 +10,7 @@ before_install:
 script:
   - docker run sidrrao/react-test npm test -- --coverage
 
-after_sucess:
+after_success:
   - docker build -t sidrrao/multi-client ./client
   - docker build -t sidrrao/multi-nginx ./nginx
   - docker build -t sidrrao/multi-server ./server
