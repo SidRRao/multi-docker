@@ -1,0 +1,26 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  #container for testing is built using the dev Dockerfile
+  - docker build -t sidrrao/react-test -f ./client/Dockerfile.dev ./client
+    #tests for other containers can also be added here
+
+script:
+  - docker run sidrrao/react-test npm test -- --coverage
+
+after_sucess:
+  - docker build -t sidrrao/multi-client ./client
+  - docker build -t sidrrao/multi-nginx ./nginx
+  - docker build -t sidrrao/multi-server ./server
+  - docker build -t sidrrao/multi-worker ./worker
+
+  #Login to the Docker CLI - docker login id and password are stored in Travis
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  #Push the images into Dockerhub
+  - docker push sidrrao/multi-client
+  - docker push sidrrao/multi-nginx
+  - docker push sidrrao/multi-server
+  - docker push sidrrao/multi-worker
