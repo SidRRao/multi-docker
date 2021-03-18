@@ -24,3 +24,15 @@ after_success:
   - docker push sidrrao/multi-nginx
   - docker push sidrrao/multi-server
   - docker push sidrrao/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2" 
+  app: "multi-docker"
+  env: "Multidocker-env"
+  bucket_name: "elasticbeanstalk-us-east-2-649066511304"
+  bucket_path: "multi-docker"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
